@@ -69,6 +69,7 @@ activities.addEventListener('change', e =>{
 
 // Prevent selection of activities that occur at the same time
 const activitiesBox = document.getElementById('activities-box');
+const checkBox = document.querySelectorAll('[type="checkbox"]');
 
 activitiesBox.addEventListener('change', e => {
     const clicked = e.target;
@@ -208,8 +209,8 @@ form.addEventListener('keyup', e => {
         emailValidator();
     } else if (cardNumber === document.activeElement ) {
         cardNumberValidator();
-    } else if (zipCode === document.activeElement) {
-        zipCodeValidator();
+    } else if (zip === document.activeElement) {
+        zipValidator();
     } else if (cvv === document.activeElement) {
         cvvValidator();
     }
@@ -231,7 +232,7 @@ form.addEventListener('submit', e => {
         if (!cardNumberValidator()) {
             e.preventDefault();
         }
-        if (!zipCodeValidator()) {
+        if (!zipValidator()) {
             e.preventDefault();
         }
         if (!cvvValidator()) {
