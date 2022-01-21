@@ -1,4 +1,4 @@
-# Interactive-Form
+# Interactive Form
 Enhance an interactive registration form for a fictional Full Stack conference.
 
 ## Project Requirements included:
@@ -36,7 +36,8 @@ Enhance an interactive registration form for a fictional Full Stack conference.
 - Conditional error message.
   * Providing additional information for certain types of errors can be very helpful to your user. For example, if the email address field is empty, it would be   enough to inform the user that they should add an email address. But if they’ve already added an email address, but formatted it incorrectly, that message wouldn’t be helpful.
    
-   
+ 
+ 
 
 ![initial form upload](screenshots/form1.png)
 
