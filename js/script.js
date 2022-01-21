@@ -67,9 +67,22 @@ activities.addEventListener('change', e =>{
     total.innerHTML = `Total: $${totalCost}`;
 });
 
+
+// Focus activities for accessibility
+const checkBox = document.querySelectorAll('[type="checkbox"]');
+
+for (let i=0; i < checkBox.length; i++) {
+    checkBox[i].addEventListener('focus', (e) => {
+        e.target.parentElement.classList.add('focus');
+    });
+
+    checkBox[i].addEventListener('blur', (e) => {
+        e.target.parentElement.classList.remove('focus');
+    });
+}
+
 // Prevent selection of activities that occur at the same time
 const activitiesBox = document.getElementById('activities-box');
-const checkBox = document.querySelectorAll('[type="checkbox"]');
 
 activitiesBox.addEventListener('change', e => {
     const clicked = e.target;
@@ -87,6 +100,7 @@ activitiesBox.addEventListener('change', e => {
         }
     }
 });
+
 
 
 // Payment Info section
@@ -228,7 +242,7 @@ form.addEventListener('submit', e => {
     if (!activitiesValidator()) { 
         e.preventDefault(); 
     }
-    if (paymentSelected === 'credit-card') {
+    if (payment.value === 'credit-card') {
         if (!cardNumberValidator()) {
             e.preventDefault();
         }
