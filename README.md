@@ -26,15 +26,15 @@ Enhance an interactive registration form for a fictional Full Stack conference.
 - Make the form validation errors obvious to all users. With the custom form validation checks you’ve already written, invalid form fields will prevent the form from submitting, but all users should be presented with clear notifications of which fields are invalid.
 
 
-### Extra Credit
-**- Prevent users from registering for conflicting activities.**
-   Ideally, we want to prevent users from selecting activities that occur at the same time.
+## Extra Credit
+- Prevent users from registering for conflicting activities.
+  * Ideally, we want to prevent users from selecting activities that occur at the same time.
    
-**- Real-time error message.**
-   Providing form validation error indications at the moment they occur better serves your user.
+- Real-time error message.
+  * Providing form validation error indications at the moment they occur better serves your user.
    
-**- Conditional error message.**
-   Providing additional information for certain types of errors can be very helpful to your user. For example, if the email address field is empty, it would be   enough to inform the user that they should add an email address. But if they’ve already added an email address, but formatted it incorrectly, that message wouldn’t be helpful.
+- Conditional error message.
+  * Providing additional information for certain types of errors can be very helpful to your user. For example, if the email address field is empty, it would be   enough to inform the user that they should add an email address. But if they’ve already added an email address, but formatted it incorrectly, that message wouldn’t be helpful.
    
    
 
