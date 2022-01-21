@@ -4,18 +4,19 @@ FSJS Project 3 - Interactive Form
 */
 
 
-//focus on Name field once page is loaded
+
+// Focus on Name field once page is loaded
 const userName = document.getElementById('name');
 userName.focus();
 
-//Programming the "Job Role" section
+// Job Role section
 const jobRole = document.getElementById('title');
 const otherJobRole = document.getElementById('other-job-role');
 
-//Other Job Role field option default is hidden
+// Other Job Role field option default is hidden
 otherJobRole.style.display = 'none';
 
-//Conditional to have "other job role" field appear only when "other" job role drop menu option is selected 
+// Field name of "other job role" appears only when "other" job role drop menu option is selected 
 jobRole.addEventListener('change', e => {
     if (e.target.value === 'other') {
         otherJobRole.style.display = 'block'; 
@@ -25,15 +26,15 @@ jobRole.addEventListener('change', e => {
 });
 
 
-//Programming the T-Shirt Info section
+// T-Shirt Info section
 const design = document.getElementById('design');
 const color = document.getElementById('color');
 const colorOption = color.children;
 
-//Color Menu default is disabled
+// Color Menu default is disabled
 color.disabled = true;
 
-//Conditional to enable Color Menu when Design options are selected
+// Enable Color Menu when Design options are selected
 design.addEventListener('change', e => {
     color.disabled = false;
     for ( let i = 0; i < colorOption.length; i++ ) {
@@ -49,12 +50,12 @@ design.addEventListener('change', e => {
     }
 });
 
-//Programming the total cost of the "Register for Activities" section
+// Total cost of Register for Activities section
 const activities = document.getElementById('activities');
 const total = document.getElementById('activities-cost'); 
 let totalCost = 0;
 
-//Conditional to total the cost of activities checked
+// Total the cost of activities checked
 activities.addEventListener('change', e =>{
     const clicked = e.target;
     const dataCost = +clicked.getAttribute('data-cost');
@@ -66,18 +67,39 @@ activities.addEventListener('change', e =>{
     total.innerHTML = `Total: $${totalCost}`;
 });
 
-//Programming the Payment Info section
+// Prevent selection of activities that occur at the same time
+const activitiesBox = document.getElementById('activities-box');
+
+activitiesBox.addEventListener('change', e => {
+    const clicked = e.target;
+    const clickedType = clicked.getAttribute('data-day-and-time');
+    for ( let i = 0; i < checkBox.length; i++ ) {
+        const checkboxType = checkBox[i].getAttribute('data-day-and-time');
+        if ( checkboxType === clickedType && clicked !== checkBox[i] ) {
+            if (clicked.checked) {
+                checkBox[i].disabled = true;
+                checkBox[i].parentElement.classList.add('disabled');
+            } else {
+                checkBox[i].disabled = false;
+                checkBox[i].parentElement.classList.remove('disabled');
+            }
+        }
+    }
+});
+
+
+// Payment Info section
 const payment = document.getElementById('payment');
 const creditCard = document.getElementById('credit-card');
 const paypal = document.getElementById('paypal');
 const bitcoin = document.getElementById('bitcoin');
 
-//PayPal and Bitcoin default is hidden
+// PayPal and Bitcoin default is hidden
 paypal.style.display = 'none';
 bitcoin.style.display = 'none';
 
 const paymentOption = payment.children;
-paymentSelected = paymentOption[1].setAttribute('selected', 'selected');
+const paymentSelected = paymentOption[1].setAttribute('selected', 'selected');
 
 payment.addEventListener('change', e => {
    for (let i = 0; i < paymentOption.length; i++) {
@@ -102,48 +124,118 @@ payment.addEventListener('change', e => {
    }
 });
 
-//Programming the "Form Validation" section
 
-// The "Name" <input type="text"> element already defined - userName
-// The "Register for Activities" <fieldset> element (should already defined - activities
+
+// Form validation section
 const email = document.getElementById('email');
 const cardNumber = document.getElementById('cc-num');
 const zip = document.getElementById('zip');
 const cvv = document.getElementById('cvv');
 const form = document.querySelector("form"); 
 
-//Use the "form" variable to listen for the submit event.
-form.addEventListener('submit', e => {
+// Form submission validation
+function validationPass(element) {
+    const parent = element.parentElement;
+    parent.classList.add('valid');
+    parent.classList.remove('not-valid');
+    parent.lastElementChild.style.display = 'none';
+}
+
+function validationFail(element) {
+    const parent = element.parentElement;
+    parent.classList.add('not-valid');
+    parent.classList.remove('valid');
+    parent.lastElementChild.style.display = 'block';
+}
+
+
+// Helper functions for form input
     function nameValidator () {
         const nameValue = userName.value;
-        const nameIsValid = /^[a-zA-Z]+ ?[a-zA-Z]*? ?[a-zA-Z]*?$/.test(nameValue);
+        const nameIsValid = /^\s*?[a-zA-Z]+\s*?[a-zA-Z]*?\s*?/.test(nameValue);
+        nameIsValid ? validationPass(userName) : validationFail(userName);
         return nameIsValid;
     }
     
     function emailValidator () {
         const emailValue = email.value;
         const emailIsValid = /^[^@]+@[^@.]+\.[a-z]+$/i.test(emailValue);
+        const emailIsEmpty = /^\s*$/.test(email.value);
+        if (emailIsValid) {
+            validationPass(email);
+        } else if (emailIsEmpty) {
+            email.nextElementSibling.textContent = 'Email address field cannot be blank';
+            validationFail(email);
+        } else {
+            validationFail(email);
+        }
         return emailIsValid;
     }
     
-    //Only validate credit card information is credit card payment option selected
-    if (paymentSelected === "credit-card") {
-        function cardNumberValidator () {
-            const cardNumberValue = cardNumber.value;
-            const cardNumberIsValid = /^[0-9]{3}$/.test(cardNumberValue);
-            return cardNumberIsValid;
+    function cardNumberValidator () {
+        const cardNumberValue = cardNumber.value;
+        const cardNumberIsValid = /^\d{13,16}$/.test(cardNumberValue);
+        cardNumberIsValid ? validationPass(cardNumber) : validationFail(cardNumber);
+        return cardNumberIsValid;
+    }
+    
+    function zipValidator () {
+        const zipValue = zip.value;
+        const zipIsValid = /^\d{5}$/.test(zipValue);
+        zipIsValid ? validationPass(zip) : validationFail(zip);
+        return zipIsValid;
+    }
+    
+    function cvvValidator () {
+        const cvvValue = cvv.value;
+        const cvvIsValid = /^\d{3}$/.test(cvvValue);
+        cvvIsValid ? validationPass(cvv) : validationFail(cvv);
+        return cvvIsValid;
+    }
+
+    function activitiesValidator() {
+        const activitiesIsValid = totalCost > 0;
+        activitiesIsValid ? validationPass(activitiesBox) : validationFail(activitiesBox);
+        return activitiesIsValid;
+    }
+
+
+// Real-time validation
+form.addEventListener('keyup', e => {
+    if (userName === document.activeElement) {
+        nameValidator();
+    } else if (email === document.activeElement) {
+        emailValidator();
+    } else if (cardNumber === document.activeElement ) {
+        cardNumberValidator();
+    } else if (zipCode === document.activeElement) {
+        zipCodeValidator();
+    } else if (cvv === document.activeElement) {
+        cvvValidator();
+    }
+});
+
+
+// Submission check for form requirement completion
+form.addEventListener('submit', e => {
+    if (!nameValidator()) { 
+        e.preventDefault(); 
+    }
+    if (!emailValidator()) { 
+        e.preventDefault(); 
+    }
+    if (!activitiesValidator()) { 
+        e.preventDefault(); 
+    }
+    if (paymentSelected === 'credit-card') {
+        if (!cardNumberValidator()) {
+            e.preventDefault();
         }
-        
-        function zipValidator () {
-            const zipValue = zip.value;
-            const zipIsValid = /^[0-9]{5}$/.test(zipValue);
-            return zipIsValid;
+        if (!zipCodeValidator()) {
+            e.preventDefault();
         }
-        
-        function cvvValidator () {
-            const cvvValue = cvv.value;
-            const cvvIsValid = /^[0-9]{3}$/.test(cvvValue);
-            return cvvIsValid;
+        if (!cvvValidator()) {
+            e.preventDefault();
         }
     }
 });
